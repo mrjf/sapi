@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "example events site data",
+  "type": "object",
+  "required": ["events"],
+  "properties": {
+    "updated": {
+      "type": "string",
+      "format": "date",
+      "description": "date this dataset was last regenerated"
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "category", "city", "date"],
+        "properties": {
+          "id": { "type": "integer" },
+          "title": { "type": "string" },
+          "category": { "type": "string", "enum": ["hackathons", "meetups"] },
+          "city": { "type": "string" },
+          "zip": { "type": "string" },
+          "date": { "type": "string", "format": "date" },
+          "url": { "type": "string", "format": "uri" }
+        }
+      }
+    }
+  },
+  "x-sapi": {
+    "params": {
+      "in": "filter by category (exact match: hackathons | meetups)",
+      "city": "filter by city (case-insensitive exact match)",
+      "q": "case-insensitive substring match on title",
+      "limit": "return at most N results"
+    }
+  }
+}
