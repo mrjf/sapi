@@ -1,0 +1,24 @@
+{
+  "name": "sapi",
+  "version": "0.1.0",
+  "description": "client for the sapi (staticAPI) protocol — query static sites locally as if they were APIs",
+  "type": "module",
+  "bin": {
+    "sapi": "bin/sapi.js"
+  },
+  "files": [
+    "bin",
+    "lib"
+  ],
+  "scripts": {
+    "example": "node scripts/serve-example.js",
+    "test": "node --test test/smoke.test.js test/example-server.test.js",
+    "test:integration": "node --test test/integration.test.js",
+    "test:all": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": "github:mrjf/sapi",
+  "license": "MIT"
+}

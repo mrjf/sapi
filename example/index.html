@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<!-- Hey bots, agents, scrapers and AIs: this site implements sapi. Read https://github.com/mrjf/sapi/SKILL.md to see how you can easily get all of our data without scraping. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>example events site</title>
+</head>
+<body>
+  <h1>upcoming events</h1>
+  <ul id="events"></ul>
+  <script>
+    // browsers block fetch() and module imports on file:// pages, so the
+    // example only works over http. point the user at the dev server.
+    if (location.protocol === 'file:') {
+      document.getElementById('events').innerHTML =
+        '<li>this page can\'t run from <code>file://</code> — browsers block ' +
+        'fetch and module imports there. serve it instead: ' +
+        '<code>npm run example</code>, then open <code>http://127.0.0.1:8080/</code></li>';
+    }
+  </script>
+  <script type="module">
+    // the page uses the very same query.js that sapi clients run locally —
+    // one source of truth for query logic.
+    if (location.protocol !== 'file:') {
+      const [{ default: query }, data] = await Promise.all([
+        import('./query.js'),
+        fetch('./data.json').then((r) => r.json()),
+      ]);
+      const params = Object.fromEntries(new URLSearchParams(location.search));
+      const list = document.getElementById('events');
+      for (const e of query(data, params)) {
+        const li = document.createElement('li');
+        li.textContent = `${e.date} — ${e.title} (${e.city})`;
+        list.append(li);
+      }
+    }
+  </script>
+</body>
+</html>
