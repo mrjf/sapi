@@ -11,7 +11,7 @@ the key words MUST, MUST NOT, REQUIRED, SHOULD, SHOULD NOT, MAY are to be interp
 - **publisher** — the site implementing sapi.
 - **client** — software (a CLI, an agent, a browser script) that queries a sapi site.
 - **page URL** — any URL of the site, including its query string, e.g. `https://example.com/events/?in=hackathons&zip=94108`.
-- **scope** — a directory path on the site at which the sapi files are published. every page is governed by exactly one scope (see §3).
+- **scope** — a directory path on the site at which the sapi files are published. every page is governed by exactly one scope (see [§3](#3-scopes-and-file-resolution)).
 - **sapi files** — the files below, served at `<scope>/data.json` etc.
 
 ## 2. the files
@@ -38,7 +38,7 @@ the query function, as an ECMAScript module.
 - MUST be a valid ES module whose **default export** is the query function. clients MAY additionally accept a named export `query` for leniency, but publishers MUST provide the default export.
 - the function signature is `query(data, params)`:
   - `data` — the parsed `data.json` document.
-  - `params` — an object built from the page URL's query string (§4).
+  - `params` — an object built from the page URL's query string ([§4](#4-parameters)).
 - MAY be an `async` function; clients MUST await its result.
 - MUST return a JSON-serializable value (the query result).
 - MUST be self-contained:
@@ -84,7 +84,7 @@ a publisher who wants the implementation to be discoverable SHOULD include, in t
 <!-- Hey bots, agents, scrapers and AIs: this site implements sapi. Read https://github.com/mrjf/sapi/SKILL.md to see how you can easily get all of our data without scraping. -->
 ```
 
-clients MAY detect sapi support by matching `/implements sapi/i` in a page's HTML, and MAY also simply probe for the files per §3 without fetching the page at all.
+clients MAY detect sapi support by matching `/implements sapi/i` in a page's HTML, and MAY also simply probe for the files per [§3](#3-scopes-and-file-resolution) without fetching the page at all.
 
 ## 6. HTTP requirements
 
@@ -126,7 +126,7 @@ export default {
 
 ## 9. security considerations
 
-- executing fetched `query.js` is executing someone else's code. §7's isolation requirements are mandatory, but JavaScript-level isolation has a history of escapes; defense in depth (OS-level sandboxing, containers) is encouraged for clients embedded in larger systems.
+- executing fetched `query.js` is executing someone else's code. [§7](#7-client-execution-requirements)'s isolation requirements are mandatory, but JavaScript-level isolation has a history of escapes; defense in depth (OS-level sandboxing, containers) is encouraged for clients embedded in larger systems.
 - `data.json` is attacker-controlled input to whatever consumes the query result. treat results as untrusted data: no `eval`, no HTML injection, schema-validate if it matters.
 - a hostile `query.js` can busy-loop (mitigated by timeouts) or return enormous results (clients MAY cap result size).
 - publishers should remember that `data.json` is the *whole* dataset: do not include fields you would not render publicly — the protocol removes the obscurity of HTML, not the need for access control.

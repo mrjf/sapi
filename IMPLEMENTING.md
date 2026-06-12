@@ -20,7 +20,7 @@ before writing anything:
 2. enumerate every query parameter the page's UI accepts (look at the URL when using filters, the client-side filter code, and any server-side handler). record each parameter's name, accepted values, and exact matching semantics (exact match? case-insensitive? substring? numeric range?).
 3. note which fields the page renders. `data.json` must include at least everything needed to reproduce any visible result.
 
-**do not invent new parameters or rename fields.** the contract (PROTOCOL.md §4) is that the page URL a human can share is a valid sapi query, with identical semantics.
+**do not invent new parameters or rename fields.** the contract ([PROTOCOL.md §4](PROTOCOL.md#4-parameters)) is that the page URL a human can share is a valid sapi query, with identical semantics.
 
 ## 2. build data.json
 
@@ -86,7 +86,7 @@ a JSON Schema (draft 2020-12) for `data.json`, plus an `x-sapi.params` block doc
 
 ## 5. serve the files
 
-- put the files at the scope governing the page: the page's own directory, or any ancestor up to the site root (clients walk up — PROTOCOL.md §3). a site with several distinct datasets should use one scope per dataset (`/events/data.json`, `/people/data.json`).
+- put the files at the scope governing the page: the page's own directory, or any ancestor up to the site root (clients walk up — [PROTOCOL.md §3](PROTOCOL.md#3-scopes-and-file-resolution)). a site with several distinct datasets should use one scope per dataset (`/events/data.json`, `/people/data.json`).
 - headers, where the host allows configuration:
   - `Access-Control-Allow-Origin: *`
   - `Cache-Control: max-age=<seconds>` matched to your real update cadence (e.g. 3600 for daily-rebuilt data), plus `ETag`
@@ -110,6 +110,6 @@ run every check; don't skip the parity check, it's the one that catches real bug
 3. **parity:** for at least 4 representative URLs — no params, each single filter, a combination, and a no-results case — compare the sapi output against what the rendered page shows for the same URL. record counts must match exactly.
 4. **sandbox-clean:** confirm `query.js` has no imports and no host API references: `grep -nE 'import|require|fetch|process|window|document' query.js` should hit nothing (except comments).
 5. **nothing leaked:** re-read `data.json` and confirm every field is something you'd happily render on the public page.
-6. **discovery present:** the comment from §6 appears in the page HTML.
+6. **discovery present:** the comment from [§6](#6-advertise-it) appears in the page HTML.
 
 if any check fails, fix and re-run all of them.
