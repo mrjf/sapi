@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "example": "node scripts/serve-example.js",
-    "test": "node --test test/smoke.test.js test/example-server.test.js",
+    "test": "node --test test/smoke.test.js test/example-server.test.js test/adapter-bbr.test.js",
     "test:integration": "node --test test/integration.test.js",
     "test:all": "node --test"
   },

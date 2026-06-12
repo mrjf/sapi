@@ -70,6 +70,12 @@ $ sapi 'https://www.basketball-reference.com/search/search.fcgi?search=robert+wi
 ["Time Lord", "Timelord", "Boo Butt", "Lob Williams"]
 ```
 
+that adapter ships in this repo — it returns each matching player's full bio box and every stat table on their page (per-game, totals, advanced, salaries, …) as structured json. install it with:
+
+```console
+$ cp adapters/basketball-reference.js ~/.config/sapi/adapters/
+```
+
 ## but this is inefficient
 
 right, it can be. because we send all the data for a page, this consumes more bandwidth than sending a json payload of only what the query actually requests. 
