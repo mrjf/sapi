@@ -167,10 +167,6 @@ export default {
       ];
     }
     const limit = Math.max(1, Number(params.limit) || PROFILE_LIMIT);
-    if (items.length > limit) {
-      process.stderr.write(`sapi: basketball-reference adapter: fetching profiles for first ${limit} of ${items.length} players (use &limit=N for more)\n`);
-    }
-
     return Promise.all(
       items.slice(0, limit).map(async (item) => {
         try {
