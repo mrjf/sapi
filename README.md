@@ -63,11 +63,17 @@ now you and all the world's agents can treat your data-driven static site, which
 
 ## sapi adapters
 
-of course, not all sites implement sapi yet. in that case, you can write an adapter and register it with sapi (drop a module in `~/.config/sapi/adapters/` — see PROTOCOL.md §8). if a query matches the regular expression for an adapter, the adapter handles fetching the page and parsing out the data.
+of course, not all sites implement sapi yet. in that case, you can write an adapter and register it with sapi (drop a module in `~/.config/sapi/adapters/` — see [PROTOCOL.md §8](PROTOCOL.md#8-adapters-non-normative)). if a query matches the regular expression for an adapter, the adapter handles fetching the page and parsing out the data.
 
 ```console
 $ sapi 'https://www.basketball-reference.com/search/search.fcgi?search=robert+williams' | jq '[.[] | select(has("knicknames"))][0].knicknames'
 ["Time Lord", "Timelord", "Boo Butt", "Lob Williams"]
+```
+
+that adapter ships in this repo — it returns each matching player's full bio box and every stat table on their page (per-game, totals, advanced, salaries, …) as structured json. install it with:
+
+```console
+$ cp adapters/basketball-reference.js ~/.config/sapi/adapters/
 ```
 
 ## but this is inefficient
@@ -79,7 +85,7 @@ it might still be less bandwidth than a scraper making a bunch of requests with 
 
 ## it's not safe to download and execute random javascript
 
-true. you should read it first (`sapi --query-src`), or at least have an agent analyze it, and run it in a sandbox. the sapi cli runs query.js in an isolated realm with no network, filesystem, or process access and a timeout (see PROTOCOL.md §7) — treat that as best-effort, not a hard boundary. or just take the data.json (`sapi --data`) and have your agent write the query logic, if you prefer.
+true. you should read it first (`sapi --query-src`), or at least have an agent analyze it, and run it in a sandbox. the sapi cli runs query.js in an isolated realm with no network, filesystem, or process access and a timeout (see [PROTOCOL.md §7](PROTOCOL.md#7-client-execution-requirements)) — treat that as best-effort, not a hard boundary. or just take the data.json (`sapi --data`) and have your agent write the query logic, if you prefer.
 
 ## but i don't want bots taking my data
 
